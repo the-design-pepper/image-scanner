@@ -3,4 +3,3 @@
 .env
 server/__pycache__/*
 server/main/__pycache__/*
-server/main/images/*
