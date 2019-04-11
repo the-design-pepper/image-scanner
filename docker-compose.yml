@@ -1,0 +1,26 @@
+version: '3.3'
+
+services:
+  server:
+    image: kkadakia/flask:1.5
+    container_name: "server"
+    env_file:
+    - .env
+    restart: unless-stopped
+    volumes:
+    - ./server:/usr/src/app
+    expose:
+    - "5000"
+    command: /usr/local/bin/gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -t 3600 --threads 12 -b :5000 main.app:app --reload
+
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: "nginx"
+    restart: always
+    ports:
+    - "5000:80"
+    depends_on:
+    - server
